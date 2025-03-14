@@ -1,0 +1,65 @@
+<div class="vikarov-procurement-config">
+  <form class="vikarov-config-form">
+    <!-- Row 1 -->
+    <div class="form-group grid-item r1c1">
+      <label>Lootable</label>
+      <div class="input-container">
+        <input type="checkbox" name="lootable" {{checked lootable}} />
+      </div>
+    </div>
+    <div class="form-group grid-item r1c2">
+      <label>Harvestable</label>
+      <div class="input-container">
+        <input type="checkbox" name="harvestable" {{checked harvestable}} />
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="form-group grid-item r2c1">
+      <label>Loot Table</label>
+      <div class="input-container">
+        <select name="lootTable">
+          <option value="">None</option>
+          {{#each tables}}
+            <option value="{{this.id}}" {{selected this.id ../lootTable}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+    <div class="form-group grid-item r2c2">
+      <label>Reagent Table</label>
+      <div class="input-container">
+        <select name="reagentTable">
+          <option value="">None</option>
+          {{#each tables}}
+            <option value="{{this.id}}" {{selected this.id ../reagentTable}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="form-group grid-item r3c1">
+      <label>Number of Pulls (Override)</label>
+      <div class="input-container">
+        <input type="number" name="numberOfPullsOverride" value="{{numberOfPullsOverride}}" min="1" max="10" step="1" />
+        <p class="hint">Leave blank to use global setting ({{globalNumberOfPulls}}).</p>
+      </div>
+    </div>
+    <div class="form-group grid-item r3c2">
+      <label>Loot Chance (Override, %)</label>
+      <div class="input-container">
+        <input type="number" name="lootChanceOverride" value="{{lootChanceOverride}}" min="0" max="100" step="1" />
+        <p class="hint">Leave blank to use global setting ({{globalLootChance}}%).</p>
+      </div>
+    </div>
+
+    <!-- Row 4 (Buttons) -->
+    <div class="form-group grid-item r4c1">
+      <button type="submit" class="vikarov-submit-button">Submit</button>
+    </div>
+    <div class="form-group grid-item r4c2">
+      <button type="button" class="vikarov-cancel-button">Cancel</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,26 @@
+<div class="vikarov-container">
+  {{#if tokens.length}}
+    <form class="vikarov-conversion-form">
+      <table>
+        <thead>
+          <tr>
+            <th>Token Name</th>
+            <th>Lootable</th>
+            <th>Harvestable</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each tokens}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td><input type="checkbox" name="lootable-{{this.id}}" checked /></td>
+              <td><input type="checkbox" name="harvestable-{{this.id}}" /></td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </form>
+  {{else}}
+    <p>No tokens available yet!</p>
+  {{/if}}
+</div>

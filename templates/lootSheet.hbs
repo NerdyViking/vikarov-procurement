@@ -1,0 +1,65 @@
+<form class="vikarov-loot-sheet-form">
+  <div class="vikarov-loot-sheet">
+    <header class="sheet-header">
+      <h1>{{actor.name}} - Loot</h1>
+      {{#if isGM}}
+        <div class="gm-controls">
+          <label>
+            <input type="checkbox" class="gm-edit-toggle" {{checked isEditable}} />
+            Edit Mode
+          </label>
+          <button class="split-gold-btn" type="button">Split Gold</button>
+        </div>
+      {{/if}}
+    </header>
+
+    <section class="sheet-body">
+      <!-- Items Section -->
+      {{#each itemCategories as |category|}}
+        <div class="item-category">
+          <h2>{{category.name}}</h2>
+          {{#if category.items.length}}
+            <div class="item-grid">
+              {{#each category.items}}
+                <div class="item-row" data-item-id="{{this._id}}">
+                  <div class="item-icon">
+                    <img src="{{this.img}}" alt="{{this.name}}" />
+                  </div>
+                  <div class="item-name" data-item-id="{{this._id}}">
+                    <span class="item-link">{{this.name}}</span>
+                    <span class="item-type">({{this.type}})</span>
+                  </div>
+                  <div class="item-quantity">
+                    {{#if this.system.quantity}}
+                      x{{this.system.quantity}}
+                    {{else}}
+                      x1
+                    {{/if}}
+                  </div>
+                  <div class="item-actions">
+                    <button class="take-btn" data-item-id="{{this._id}}">Take</button>
+                    <button class="give-btn" data-item-id="{{this._id}}">Give</button>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p>No {{category.name}} available.</p>
+          {{/if}}
+        </div>
+      {{/each}}
+
+      <!-- Currency Footer -->
+      <footer class="currency-footer">
+        <h2>Currency</h2>
+        <div class="currency-grid">
+          <div class="currency-item">Platinum: {{currency.pp}}</div>
+          <div class="currency-item">Gold: {{currency.gp}}</div>
+          <div class="currency-item">Electrum: {{currency.ep}}</div>
+          <div class="currency-item">Silver: {{currency.sp}}</div>
+          <div class="currency-item">Copper: {{currency.cp}}</div>
+        </div>
+      </footer>
+    </section>
+  </div>
+</form>

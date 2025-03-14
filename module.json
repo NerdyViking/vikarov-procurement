@@ -1,0 +1,41 @@
+{
+  "id": "vikarov-procurement",
+  "title": "Vikarov’s Guide to Procurement",
+  "description": "A module for Foundry VTT that enhances post-combat looting and harvesting for D&D 5e.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "YourNameHere",
+      "email": "your.email@example.com"
+    }
+  ],
+  "compatibility": {
+    "minimum": "12",
+    "verified": "12.331"
+  },
+  "systems": [
+    {
+      "id": "dnd5e",
+      "version": "4.3.6"
+    }
+  ],
+  "esmodules": [
+    "scripts/shared/main.js",
+    "scripts/shared/settings.js",
+    "scripts/shared/utils.js",
+    "scripts/shared/constants.js",
+    "scripts/lootables/sidebarButtons.js",
+    "scripts/lootables/conversion.js",
+    "scripts/lootables/actorConfig.js",
+    "scripts/lootables/lootSheet.js",
+    "scripts/harvesting/harvestSystem.js",
+    "scripts/tables/tableUi.js"
+  ],
+  "styles": [
+    "styles/vikarov.css"
+  ],
+  "url": "https://github.com/yourusername/vikarov-procurement",
+  "manifest": "https://raw.githubusercontent.com/yourusername/vikarov-procurement/main/module.json",
+  "download": "https://github.com/yourusername/vikarov-procurement/releases/download/v0.1.0/module.zip",
+  "readme": "README.md"
+}
