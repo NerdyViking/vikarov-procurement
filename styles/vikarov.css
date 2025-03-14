@@ -5,62 +5,62 @@
 }
 
 /* Specific styling for Procurement Config dialog */
-.vikarov-procurement-config {
+.vikarov-container.vikarov-procurement-config {
   font-family: "Signika", sans-serif;
   padding: 10px;
 }
 
-.vikarov-config-form {
+.vikarov-container .vikarov-config-form {
   display: grid;
   grid-template-columns: 1fr 1fr; /* Two equal columns */
   grid-template-rows: auto auto auto auto; /* Four rows */
   gap: 10px; /* Space between grid items */
 }
 
-.form-group {
+.vikarov-container .form-group {
   margin: 0; /* Reset margin since grid handles spacing */
 }
 
-.form-group label {
+.vikarov-container .form-group label {
   display: block; /* Stack above input */
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.form-group .input-container {
+.vikarov-container .form-group .input-container {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.form-group input[type="checkbox"] {
+.vikarov-container .form-group input[type="checkbox"] {
   margin: 0; /* Remove inline margin */
 }
 
-.form-group select,
-.form-group input[type="number"] {
+.vikarov-container .form-group select,
+.vikarov-container .form-group input[type="number"] {
   width: 150px;
   padding: 2px;
 }
 
-.form-group .hint {
+.vikarov-container .form-group .hint {
   font-size: 12px;
   color: #666;
 }
 
 /* Grid item positioning */
-.grid-item.r1c1 { grid-column: 1; grid-row: 1; }
-.grid-item.r1c2 { grid-column: 2; grid-row: 1; }
-.grid-item.r2c1 { grid-column: 1; grid-row: 2; }
-.grid-item.r2c2 { grid-column: 2; grid-row: 2; }
-.grid-item.r3c1 { grid-column: 1; grid-row: 3; }
-.grid-item.r3c2 { grid-column: 2; grid-row: 3; }
-.grid-item.r4c1 { grid-column: 1; grid-row: 4; }
-.grid-item.r4c2 { grid-column: 2; grid-row: 4; }
+.vikarov-container .grid-item.r1c1 { grid-column: 1; grid-row: 1; }
+.vikarov-container .grid-item.r1c2 { grid-column: 2; grid-row: 1; }
+.vikarov-container .grid-item.r2c1 { grid-column: 1; grid-row: 2; }
+.vikarov-container .grid-item.r2c2 { grid-column: 2; grid-row: 2; }
+.vikarov-container .grid-item.r3c1 { grid-column: 1; grid-row: 3; }
+.vikarov-container .grid-item.r3c2 { grid-column: 2; grid-row: 3; }
+.vikarov-container .grid-item.r4c1 { grid-column: 1; grid-row: 4; }
+.vikarov-container .grid-item.r4c2 { grid-column: 2; grid-row: 4; }
 
 /* Buttons in row 4 */
-.vikarov-submit-button,
-.vikarov-cancel-button {
+.vikarov-container .vikarov-submit-button,
+.vikarov-container .vikarov-cancel-button {
   padding: 5px 15px;
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -70,17 +70,26 @@
   text-align: center;
 }
 
-.vikarov-cancel-button {
+.vikarov-container .vikarov-cancel-button {
   background-color: #ccc;
+}
+
+.vikarov-config-container {
+  width: 18px !important; /* Strictly enforce width */
+  height: 18px !important; /* Strictly enforce height */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  flex-shrink: 0; /* Prevent shrinking */
+  flex-grow: 0; /* Prevent growing */
 }
 
 /* Icon styling */
 .vikarov-config-icon {
-  margin-right: 5px;
-  padding: 2px 4px;
   font-size: 14px;
   cursor: pointer;
-  color: antiquewhite !important;
+  margin-left: 9px;
+  margin-top: 4px;
 }
 
 .vikarov-config-icon:hover {
@@ -94,37 +103,37 @@
   height: 100%;
 }
 
-.sheet-header {
+.vikarov-loot-sheet .sheet-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.gm-controls {
+.vikarov-loot-sheet .gm-controls {
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
-.sheet-body {
+.vikarov-loot-sheet .sheet-body {
   flex: 1;
   overflow-y: auto; /* Allow items list to scroll while body takes remaining space */
   min-height: 0; /* Ensure the body can shrink */
   padding-bottom: 50px; /* Add padding to prevent overlap with footer */
 }
 
-.item-category {
+.vikarov-loot-sheet .item-category {
   margin-bottom: 10px;
 }
 
-.item-grid {
+.vikarov-loot-sheet .item-grid {
   display: flex;
   flex-direction: column;
   gap: 2px; /* Reduce gap between rows for compactness */
 }
 
-.item-row {
+.vikarov-loot-sheet .item-row {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -133,24 +142,19 @@
   height: 30px; /* Set compact height */
 }
 
-.item-icon {
+.vikarov-loot-sheet .item-icon {
   width: 30px;
   height: 30px;
   flex-shrink: 0;
 }
 
-.item-icon:hover {
-  outline: 2px solid red; /* Red outline on hover */
-  outline-offset: 0; /* No offset to keep it tight */
-}
-
-.item-icon img {
+.vikarov-loot-sheet .item-icon img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.item-name {
+.vikarov-loot-sheet .item-name {
   flex: 1;
   display: flex;
   gap: 3px;
@@ -160,24 +164,23 @@
   white-space: nowrap;
 }
 
-.item-name:hover {
-  outline: 2px solid red; /* Red outline on hover */
-  outline-offset: 0; /* No offset to keep it tight */
+.vikarov-loot-sheet .item-name:hover {
+  text-shadow: 0 0 5px red; /* Red glow effect on the text */
 }
 
-.item-name .item-link {
+.vikarov-loot-sheet .item-name .item-link {
   text-decoration: none; /* Remove underline hover effect */
   color: inherit; /* Use default text color */
 }
 
-.item-quantity {
+.vikarov-loot-sheet .item-quantity {
   text-align: right;
   width: 40px;
   flex-shrink: 0;
   margin-right: 10px; /* Add margin to prevent collision with Take button */
 }
 
-.item-actions {
+.vikarov-loot-sheet .item-actions {
   display: flex;
   gap: 3px;
   width: 80px;
@@ -185,8 +188,8 @@
   justify-content: flex-end;
 }
 
-.item-actions button,
-.split-gold-btn {
+.vikarov-loot-sheet .item-actions button,
+.vikarov-loot-sheet .split-gold-btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -196,12 +199,12 @@
   transition: box-shadow 0.2s ease; /* Smooth transition for hover effect */
 }
 
-.item-actions button:hover,
-.split-gold-btn:hover {
+.vikarov-loot-sheet .item-actions button:hover,
+.vikarov-loot-sheet .split-gold-btn:hover {
   box-shadow: inset 0 0 5px red; /* Inward red box-shadow on hover */
 }
 
-.currency-footer {
+.vikarov-loot-sheet .currency-footer {
   margin-top: 10px;
   padding-top: 5px;
   border-top: 1px solid #ccc;
@@ -212,14 +215,14 @@
   width: 100%;
 }
 
-.currency-grid {
+.vikarov-loot-sheet .currency-grid {
   display: flex;
   gap: 15px;
   justify-content: space-between;
   align-items: center;
 }
 
-.currency-item {
+.vikarov-loot-sheet .currency-item {
   flex: 1;
   text-align: center;
   font-size: 0.9em; /* Slightly smaller font for compactness */

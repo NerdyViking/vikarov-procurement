@@ -67,23 +67,33 @@ class ProcurementConfigDialog extends FormApplication {
   }
 }
 
+// ... (previous code unchanged until the hook)
+
 Hooks.on("renderActorSheet", (sheet, html) => {
-  if (!(sheet instanceof dnd5e.applications.actor.ActorSheet5eNPC) || sheet.actor.type !== "npc") return;
-
-  const headerElements = html.find(".header-elements");
-  if (headerElements.length === 0) {
-    console.warn("Header elements not found for NPC sheet");
-    return;
-  }
-
-  const configIcon = $("<i>")
-    .addClass("fas fa-leaf vikarov-config-icon")
-    .attr("title", "Procurement Configuration")
-    .on("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      new ProcurementConfigDialog(sheet.actor).render(true);
-    });
-
-  headerElements.append(configIcon);
-});
+    if (!(sheet instanceof dnd5e.applications.actor.ActorSheet5eNPC) || sheet.actor.type !== "npc") return;
+  
+    const headerElements = html.find(".header-elements");
+    if (headerElements.length === 0) {
+      console.warn("Header elements not found for NPC sheet");
+      return;
+    }
+  
+    // Create a container for the icon to control its space
+    const configIconContainer = $("<div>")
+      .addClass("vikarov-config-container");
+  
+    const configIcon = $("<i>")
+      .addClass("fas fa-leaf vikarov-config-icon")
+      .attr("title", "Procurement Configuration")
+      .on("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        new ProcurementConfigDialog(sheet.actor).render(true);
+      });
+  
+    configIconContainer.append(configIcon);
+  
+    // Insert the container before the CopyUuid icon
+    html.find(".window-header .document-id-link").before(configIconContainer);
+    console.log(`Added procurement config icon to ${sheet.actor.name} in window-header`);
+  });
