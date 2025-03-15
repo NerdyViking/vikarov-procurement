@@ -1,4 +1,4 @@
-<div class="vikarov-procurement-config">
+<div class="vikarov-container vikarov-procurement-config">
   <form class="vikarov-config-form">
     <!-- Row 1 -->
     <div class="form-group grid-item r1c1">
@@ -21,7 +21,7 @@
         <select name="lootTable">
           <option value="">None</option>
           {{#each tables}}
-            <option value="{{this.id}}" {{selected this.id ../lootTable}}>{{this.name}}</option>
+            <option value="{{this._id}}" {{selected (eq this._id ../lootTable)}}>{{this.name}}</option>
           {{/each}}
         </select>
       </div>
@@ -32,7 +32,7 @@
         <select name="reagentTable">
           <option value="">None</option>
           {{#each tables}}
-            <option value="{{this.id}}" {{selected this.id ../reagentTable}}>{{this.name}}</option>
+            <option value="{{this._id}}" {{selected (eq this._id ../reagentTable)}}>{{this.name}}</option>
           {{/each}}
         </select>
       </div>
@@ -40,25 +40,29 @@
 
     <!-- Row 3 -->
     <div class="form-group grid-item r3c1">
-      <label>Number of Pulls (Override)</label>
+      <label>Number of Pulls Override</label>
       <div class="input-container">
-        <input type="number" name="numberOfPullsOverride" value="{{numberOfPullsOverride}}" min="1" max="10" step="1" />
-        <p class="hint">Leave blank to use global setting ({{globalNumberOfPulls}}).</p>
+        <input type="number" name="numberOfPullsOverride" value="{{numberOfPullsOverride}}" placeholder="{{globalNumberOfPulls}} (default)" />
+        <p class="hint">Leave empty to use the default value ({{globalNumberOfPulls}}).</p>
       </div>
     </div>
     <div class="form-group grid-item r3c2">
-      <label>Loot Chance (Override, %)</label>
+      <label>Loot Chance Override (%)</label>
       <div class="input-container">
-        <input type="number" name="lootChanceOverride" value="{{lootChanceOverride}}" min="0" max="100" step="1" />
-        <p class="hint">Leave blank to use global setting ({{globalLootChance}}%).</p>
+        <input type="number" name="lootChanceOverride" value="{{lootChanceOverride}}" placeholder="{{globalLootChance}} (default)" />
+        <p class="hint">Leave empty to use the default value ({{globalLootChance}}).</p>
       </div>
     </div>
 
-    <!-- Row 4 (Buttons) -->
+    <!-- Row 4 -->
     <div class="form-group grid-item r4c1">
-      <button type="submit" class="vikarov-submit-button">Submit</button>
+      <label>Description</label>
+      <div class="input-container">
+        <textarea name="description" rows="3" placeholder="Optional description for immersion (e.g., 'A pile of bones and tattered cloth')">{{description}}</textarea>
+      </div>
     </div>
     <div class="form-group grid-item r4c2">
+      <button type="submit" class="vikarov-submit-button">Save</button>
       <button type="button" class="vikarov-cancel-button">Cancel</button>
     </div>
   </form>

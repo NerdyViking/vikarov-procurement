@@ -96,6 +96,28 @@
   color: green !important;
 }
 
+/* Edit toggle icon styling */
+.vikarov-edit-container {
+  width: 18px !important;
+  height: 18px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.vikarov-edit-toggle {
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 9px;
+  margin-top: 4px;
+}
+
+.vikarov-edit-toggle:hover {
+  color: blue !important;
+}
+
 /* Loot Sheet styling */
 .vikarov-loot-sheet {
   display: flex;
@@ -103,24 +125,114 @@
   height: 100%;
 }
 
-.vikarov-loot-sheet .sheet-header {
+.vikarov-loot-sheet .top-section {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
-.vikarov-loot-sheet .gm-controls {
+.vikarov-loot-sheet .actor-image {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.vikarov-loot-sheet .actor-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.vikarov-loot-sheet .actor-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vikarov-loot-sheet .actor-info h1 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.vikarov-loot-sheet .actor-dropdown {
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.vikarov-loot-sheet .actor-dropdown select {
+  pointer-events: auto !important;
+  cursor: pointer;
+  width: 100%;
+  height: 25px;
+  padding: 2px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.vikarov-loot-sheet .actor-description {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 80px;
+  padding: 5px;
+  background-color: none;
+}
+
+.vikarov-loot-sheet .actor-description p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.vikarov-loot-sheet .currency-section {
+  margin-bottom: 15px;
+}
+
+.vikarov-loot-sheet .currency-section h2 {
+  margin-top: 0;
+}
+
+.vikarov-loot-sheet .currency-grid {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vikarov-loot-sheet .currency-item {
+width: 60px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.vikarov-loot-sheet .currency-actions {
   display: flex;
   gap: 10px;
-  align-items: center;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.vikarov-loot-sheet .currency-actions button {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+  width: 100px;
+}
+
+.vikarov-loot-sheet .currency-actions button:hover {
+  box-shadow: inset 0 0 5px red;
 }
 
 .vikarov-loot-sheet .sheet-body {
   flex: 1;
-  overflow-y: auto; /* Allow items list to scroll while body takes remaining space */
-  min-height: 0; /* Ensure the body can shrink */
-  padding-bottom: 50px; /* Add padding to prevent overlap with footer */
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: 50px;
 }
 
 .vikarov-loot-sheet .item-category {
@@ -130,16 +242,17 @@
 .vikarov-loot-sheet .item-grid {
   display: flex;
   flex-direction: column;
-  gap: 2px; /* Reduce gap between rows for compactness */
+  gap: 2px;
 }
 
+/* Loot Sheet styling (partial update) */
 .vikarov-loot-sheet .item-row {
   display: flex;
   align-items: center;
   gap: 5px;
   padding: 2px;
   border-bottom: 1px solid #ccc;
-  height: 30px; /* Set compact height */
+  height: 30px;
 }
 
 .vikarov-loot-sheet .item-icon {
@@ -165,65 +278,93 @@
 }
 
 .vikarov-loot-sheet .item-name:hover {
-  text-shadow: 0 0 5px red; /* Red glow effect on the text */
+  text-shadow: 0 0 5px red;
 }
 
 .vikarov-loot-sheet .item-name .item-link {
-  text-decoration: none; /* Remove underline hover effect */
-  color: inherit; /* Use default text color */
+  text-decoration: none;
+  color: inherit;
 }
 
 .vikarov-loot-sheet .item-quantity {
+  flex: 0 0 50px; /* Fixed width for quantity */
   text-align: right;
-  width: 40px;
-  flex-shrink: 0;
-  margin-right: 10px; /* Add margin to prevent collision with Take button */
+  padding-right: 5px; /* Space before actions */
+  order: 2; /* Move quantity before actions */
 }
 
 .vikarov-loot-sheet .item-actions {
   display: flex;
   gap: 3px;
-  width: 80px;
   flex-shrink: 0;
-  justify-content: flex-end;
+  order: 3; /* Move actions after quantity */
 }
 
-.vikarov-loot-sheet .item-actions button,
-.vikarov-loot-sheet .split-gold-btn {
+.vikarov-loot-sheet .item-actions:not(:has(.delete-btn)) {
+  width: 120px; /* Space for Take and Give only */
+}
+
+.vikarov-loot-sheet .item-actions:has(.delete-btn) {
+  width: 180px; /* Space for Take, Give, and Delete */
+}
+
+.vikarov-loot-sheet .item-actions button {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   padding: 0 5px;
   text-align: center;
-  transition: box-shadow 0.2s ease; /* Smooth transition for hover effect */
+  transition: box-shadow 0.2s ease;
 }
 
-.vikarov-loot-sheet .item-actions button:hover,
-.vikarov-loot-sheet .split-gold-btn:hover {
-  box-shadow: inset 0 0 5px red; /* Inward red box-shadow on hover */
+.vikarov-loot-sheet .item-actions button:hover {
+  box-shadow: inset 0 0 5px red;
 }
 
-.vikarov-loot-sheet .currency-footer {
-  margin-top: 10px;
-  padding-top: 5px;
-  border-top: 1px solid #ccc;
-  flex-shrink: 0; /* Prevent the footer from shrinking */
-  min-height: 40px; /* Ensure minimum height for visibility */
-  position: relative;
-  bottom: 0;
+/* Ensure other styles remain unchanged */
+.vikarov-loot-sheet .actor-name {
+  font-size: 1.5em;
   width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px;
 }
 
-.vikarov-loot-sheet .currency-grid {
-  display: flex;
-  gap: 15px;
-  justify-content: space-between;
+.vikarov-loot-sheet .currency-input {
+  width: 50px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.vikarov-loot-sheet .quantity-input {
+  width: 40px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px;
+  text-align: right;
+}
+
+.window-header .vikarov-edit-container {
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin: 0 5px; /* Match spacing of other header buttons */
+  padding: 0;
+  position: relative;
+  z-index: 10; /* Ensure it’s above the actor image */
 }
 
-.vikarov-loot-sheet .currency-item {
-  flex: 1;
-  text-align: center;
-  font-size: 0.9em; /* Slightly smaller font for compactness */
+.window-header .vikarov-edit-toggle {
+  font-size: 14px;
+  color: #fff; /* Match color of other header icons */
+  cursor: pointer;
+  line-height: 18px; /* Center vertically */
+}
+
+.window-header .vikarov-edit-toggle:hover {
+  color: #00ff00; /* Green hover effect */
 }

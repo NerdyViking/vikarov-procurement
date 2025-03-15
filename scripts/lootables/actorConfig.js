@@ -30,7 +30,8 @@ class ProcurementConfigDialog extends FormApplication {
       lootTable: this.actor.getFlag("vikarov-procurement", "lootTable") || "",
       reagentTable: this.actor.getFlag("vikarov-procurement", "reagentTable") || "",
       numberOfPullsOverride: this.actor.getFlag("vikarov-procurement", "numberOfPullsOverride") || "",
-      lootChanceOverride: this.actor.getFlag("vikarov-procurement", "lootChanceOverride") || ""
+      lootChanceOverride: this.actor.getFlag("vikarov-procurement", "lootChanceOverride") || "",
+      description: this.actor.getFlag("vikarov-procurement", "description") || ""
     };
 
     return foundry.utils.mergeObject({
@@ -47,7 +48,8 @@ class ProcurementConfigDialog extends FormApplication {
       lootTable: formData.lootTable || "",
       reagentTable: formData.reagentTable || "",
       numberOfPullsOverride: formData.numberOfPullsOverride ? parseInt(formData.numberOfPullsOverride) : "",
-      lootChanceOverride: formData.lootChanceOverride ? parseInt(formData.lootChanceOverride) : ""
+      lootChanceOverride: formData.lootChanceOverride ? parseInt(formData.lootChanceOverride) : "",
+      description: formData.description || ""
     };
 
     await this.actor.setFlag("vikarov-procurement", "lootable", settings.lootable);
@@ -56,6 +58,7 @@ class ProcurementConfigDialog extends FormApplication {
     await this.actor.setFlag("vikarov-procurement", "reagentTable", settings.reagentTable);
     await this.actor.setFlag("vikarov-procurement", "numberOfPullsOverride", settings.numberOfPullsOverride);
     await this.actor.setFlag("vikarov-procurement", "lootChanceOverride", settings.lootChanceOverride);
+    await this.actor.setFlag("vikarov-procurement", "description", settings.description);
 
     console.log(`Saved configuration for ${this.actor.name}:`, settings);
     ui.notifications.info(`Procurement settings saved for ${this.actor.name}`);
@@ -67,33 +70,30 @@ class ProcurementConfigDialog extends FormApplication {
   }
 }
 
-// ... (previous code unchanged until the hook)
-
 Hooks.on("renderActorSheet", (sheet, html) => {
-    if (!(sheet instanceof dnd5e.applications.actor.ActorSheet5eNPC) || sheet.actor.type !== "npc") return;
-  
-    const headerElements = html.find(".header-elements");
-    if (headerElements.length === 0) {
-      console.warn("Header elements not found for NPC sheet");
-      return;
-    }
-  
-    // Create a container for the icon to control its space
-    const configIconContainer = $("<div>")
-      .addClass("vikarov-config-container");
-  
-    const configIcon = $("<i>")
-      .addClass("fas fa-leaf vikarov-config-icon")
-      .attr("title", "Procurement Configuration")
-      .on("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        new ProcurementConfigDialog(sheet.actor).render(true);
-      });
-  
-    configIconContainer.append(configIcon);
-  
-    // Insert the container before the CopyUuid icon
-    html.find(".window-header .document-id-link").before(configIconContainer);
-    console.log(`Added procurement config icon to ${sheet.actor.name} in window-header`);
-  });
+  if (!(sheet instanceof dnd5e.applications.actor.ActorSheet5eNPC) || sheet.actor.type !== "npc") return;
+
+  const headerElements = html.find(".header-elements");
+  if (headerElements.length === 0) {
+    console.warn("Header elements not found for NPC sheet");
+    return;
+  }
+
+  const configIconContainer = $("<div>")
+    .addClass("vikarov-config-container");
+
+  const configIcon = $("<i>")
+    .addClass("fas fa-leaf vikarov-config-icon")
+    .attr("title", "Procurement Configuration")
+    .on("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      new ProcurementConfigDialog(sheet.actor).render(true);
+    });
+
+  configIconContainer.append(configIcon);
+
+  // Insert the container before the CopyUuid icon
+  html.find(".window-header .document-id-link").before(configIconContainer);
+  console.log(`Added procurement config icon to ${sheet.actor.name} in window-header`);
+});

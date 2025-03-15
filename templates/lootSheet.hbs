@@ -1,17 +1,83 @@
 <form class="vikarov-loot-sheet-form">
   <div class="vikarov-loot-sheet">
-    <header class="sheet-header">
-      <h1>{{actor.name}} - Loot</h1>
-      {{#if isGM}}
-        <div class="gm-controls">
-          <label>
-            <input type="checkbox" class="gm-edit-toggle" {{checked isEditable}} />
-            Edit Mode
-          </label>
-          <button class="split-gold-btn" type="button">Split Gold</button>
+    <!-- Top Section -->
+    <div class="top-section">
+      <div class="actor-image">
+        <img src="{{actor.img}}" alt="{{actor.name}}" />
+      </div>
+      <div class="actor-info">
+        {{#if isGM}}
+          <input type="text" class="actor-name" value="{{actor.name}}" {{#unless isEditable}}disabled{{/unless}} />
+        {{else}}
+          <h1>{{actor.name}}</h1>
+        {{/if}}
+        <div class="actor-dropdown">
+          <select id="actor-select" name="actor-select">
+            {{#each ownedActors}}
+              <option value="{{this.id}}" {{selected (eq this.id selectedActorId)}}>{{this.name}}</option>
+            {{/each}}
+          </select>
         </div>
-      {{/if}}
-    </header>
+        <div class="actor-description">
+          {{#if description}}
+            <p>{{description}}</p>
+          {{else}}
+            <p>No description available.</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+
+    <!-- Currency Section -->
+    <div class="currency-section">
+      <h2>Currency</h2>
+      <div class="currency-grid">
+        <div class="currency-item">
+          Platinum: 
+          {{#if isGM}}
+            <input type="number" class="currency-input" name="system.currency.pp" value="{{currency.pp}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+          {{else}}
+            {{currency.pp}}
+          {{/if}}
+        </div>
+        <div class="currency-item">
+          Gold: 
+          {{#if isGM}}
+            <input type="number" class="currency-input" name="system.currency.gp" value="{{currency.gp}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+          {{else}}
+            {{currency.gp}}
+          {{/if}}
+        </div>
+        <div class="currency-item">
+          Electrum: 
+          {{#if isGM}}
+            <input type="number" class="currency-input" name="system.currency.ep" value="{{currency.ep}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+          {{else}}
+            {{currency.ep}}
+          {{/if}}
+        </div>
+        <div class="currency-item">
+          Silver: 
+          {{#if isGM}}
+            <input type="number" class="currency-input" name="system.currency.sp" value="{{currency.sp}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+          {{else}}
+            {{currency.sp}}
+          {{/if}}
+        </div>
+        <div class="currency-item">
+          Copper: 
+          {{#if isGM}}
+            <input type="number" class="currency-input" name="system.currency.cp" value="{{currency.cp}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+          {{else}}
+            {{currency.cp}}
+          {{/if}}
+        </div>
+      </div>
+      <div class="currency-actions">
+        <button class="split-gold-btn" type="button">Split Gold</button>
+        <button class="take-gold-btn" type="button">Take Gold</button>
+      </div>
+    </div>
 
     <section class="sheet-body">
       <!-- Items Section -->
@@ -30,15 +96,18 @@
                     <span class="item-type">({{this.type}})</span>
                   </div>
                   <div class="item-quantity">
-                    {{#if this.system.quantity}}
-                      x{{this.system.quantity}}
+                    {{#if category.isGM}}
+                      <input type="number" class="quantity-input" data-item-id="{{this._id}}" value="{{#if this.system.quantity}}{{this.system.quantity}}{{else}}1{{/if}}" min="1" {{#unless category.isEditable}}disabled{{/unless}} />
                     {{else}}
-                      x1
+                      x{{#if this.system.quantity}}{{this.system.quantity}}{{else}}1{{/if}}
                     {{/if}}
                   </div>
                   <div class="item-actions">
                     <button class="take-btn" data-item-id="{{this._id}}">Take</button>
                     <button class="give-btn" data-item-id="{{this._id}}">Give</button>
+                    {{#if category.isGM}}
+                      <button class="delete-btn" data-item-id="{{this._id}}">Delete</button>
+                    {{/if}}
                   </div>
                 </div>
               {{/each}}
@@ -48,18 +117,6 @@
           {{/if}}
         </div>
       {{/each}}
-
-      <!-- Currency Footer -->
-      <footer class="currency-footer">
-        <h2>Currency</h2>
-        <div class="currency-grid">
-          <div class="currency-item">Platinum: {{currency.pp}}</div>
-          <div class="currency-item">Gold: {{currency.gp}}</div>
-          <div class="currency-item">Electrum: {{currency.ep}}</div>
-          <div class="currency-item">Silver: {{currency.sp}}</div>
-          <div class="currency-item">Copper: {{currency.cp}}</div>
-        </div>
-      </footer>
     </section>
   </div>
 </form>
