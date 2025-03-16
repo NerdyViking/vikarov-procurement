@@ -32,7 +32,12 @@
     "scripts/tables/tableUi.js"
   ],
   "styles": [
-    "styles/vikarov.css"
+    "styles/vikarov.css",
+    "styles/harvestDialogRoll.css"
+  ],
+  "templates": [
+    "templates/harvestDialog.hbs",
+    "templates/harvestDialogRoll.hbs"
   ],
   "url": "https://github.com/yourusername/vikarov-procurement",
   "manifest": "https://raw.githubusercontent.com/yourusername/vikarov-procurement/main/module.json",

@@ -22,14 +22,6 @@ Hooks.once("init", () => {
       tokenDocument.setFlag("core", "sheetClass", "vikarov-procurement.LootSheetVikarov");
     }
   });
-
-  // Simplify renderTokenHUD hook
-  Hooks.on("renderTokenHUD", (hud, html, tokenData) => {
-    const token = canvas.tokens.get(tokenData._id);
-    if (token && shouldUseLootSheet(token)) {
-      console.log(`Token ${token.name} is lootable on HUD render`);
-    }
-  });
 });
 
 Hooks.once("ready", async () => {

@@ -13,7 +13,6 @@ Hooks.on("getSceneControlButtons", (controls) => {
     icon: "fas fa-exchange-alt",
     visible: game.user.isGM,
     onClick: () => {
-      console.log("Convert Tokens button clicked");
       openConversionDialog();
     },
     button: true
@@ -25,7 +24,6 @@ Hooks.on("getSceneControlButtons", (controls) => {
     icon: "fas fa-table",
     visible: game.user.isGM,
     onClick: () => {
-      console.log("Reagent Tables button clicked");
       openTableDialog();
     },
     button: true

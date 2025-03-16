@@ -48,7 +48,6 @@ export class LootSheetVikarov extends ActorSheet {
 
     this._partyMembers = partyMembers;
 
-    console.log("Debug: getData - isGM:", game.user.isGM, "isEditable:", this.isEditable);
     return {
       ...data,
       itemCategories,
@@ -91,11 +90,6 @@ export class LootSheetVikarov extends ActorSheet {
 
   activateListeners(html) {
     super.activateListeners(html);
-
-    // Debug element counts
-    console.log("Debug: activateListeners - Delete buttons:", html.find(".delete-btn").length);
-    console.log("Debug: activateListeners - Currency inputs:", html.find(".currency-input").length);
-    console.log("Debug: activateListeners - Quantity inputs:", html.find(".quantity-input").length);
 
     // Remove disabled attributes based on permissions
     const canEdit = this.actor.testUserPermission(game.user, "OWNER") || game.user.isGM;
@@ -365,7 +359,6 @@ export class LootSheetVikarov extends ActorSheet {
 
   setEditable(isEditable) {
     this._isEditable = isEditable;
-    console.log("Debug: Editable state set to:", this._isEditable);
   }
 
   async _selectTargetActor() {
@@ -412,7 +405,6 @@ export function shouldUseLootSheet(token) {
 Hooks.on("renderLootSheetVikarov", (sheet, html) => {
   if (!game.user.isGM) return;
 
-  console.log("Debug: renderLootSheetVikarov hook triggered, sheet:", sheet.actor.name, "isEditable:", sheet.isEditable);
   const header = html.find(".window-header");
   const docLink = header.find(".document-id-link");
 
@@ -426,7 +418,6 @@ Hooks.on("renderLootSheetVikarov", (sheet, html) => {
       .attr("class", "fas vikarov-edit-toggle " + (sheet.isEditable ? "fa-lock-open" : "fa-lock"))
       .attr("title", sheet.isEditable ? "Disable Edit Mode" : "Enable Edit Mode");
     
-    console.log("Debug: Edit toggle icon class set to:", editIcon.attr("class"));
 
     editIconContainer.append(editIcon);
     docLink.after(editIconContainer);
@@ -435,7 +426,6 @@ Hooks.on("renderLootSheetVikarov", (sheet, html) => {
       event.preventDefault();
       const newState = !sheet.isEditable;
       sheet.setEditable(newState);
-      console.log("Debug: Edit toggle clicked, new state:", newState, "isEditable now:", sheet.isEditable);
       // Force header update by removing and re-adding the container
       header.find(".vikarov-edit-container").remove();
       const newIconContainer = $("<div>")
@@ -450,7 +440,6 @@ Hooks.on("renderLootSheetVikarov", (sheet, html) => {
         e.preventDefault();
         const updatedState = !sheet.isEditable;
         sheet.setEditable(updatedState);
-        console.log("Debug: Edit toggle clicked, new state:", updatedState, "isEditable now:", sheet.isEditable);
         // Repeat the header update process
         header.find(".vikarov-edit-container").remove();
         const updatedIconContainer = $("<div>")

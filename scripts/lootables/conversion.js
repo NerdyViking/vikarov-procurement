@@ -1,5 +1,57 @@
 console.log("Vikarov’s Guide to Procurement: conversion.js loaded");
 
+import { HARVESTABLE_TYPES } from "../shared/constants.js";
+import { getSetting } from "../shared/settings.js";
+
+// Helper function to roll on a table and return items
+async function rollAndPopulateItems(tableId, numberOfPulls, allowDuplicates = false) {
+  if (!tableId) return [];
+  const table = game.tables.get(tableId);
+  if (!table) {
+    ui.notifications.warn(`Table not found for ID ${tableId}.`);
+    return [];
+  }
+
+  const pulls = numberOfPulls || getSetting("numberOfPulls") || 1;
+  const rolledItems = [];
+  const rolledResults = new Set();
+
+  console.log(`Rolling ${pulls} times on table ${table.name}, allowDuplicates=${allowDuplicates}`);
+
+  for (let i = 0; i < pulls; i++) {
+    const rollResult = await table.roll();
+    const result = rollResult.results[0];
+    if (!result) {
+      console.log(`No result from roll ${i + 1} on table ${table.name}`);
+      continue;
+    }
+
+    const itemUuid = result.getFlag("vikarov-procurement", "itemUuid");
+    const itemText = result.text;
+    console.log(`Roll ${i + 1}: itemText=${itemText}, itemUuid=${itemUuid}`);
+
+    if (itemUuid) {
+      if (allowDuplicates || !rolledResults.has(itemUuid)) {
+        const item = await fromUuid(itemUuid);
+        if (item) {
+          rolledItems.push(item.toObject());
+          if (!allowDuplicates) rolledResults.add(itemUuid);
+        } else {
+          console.warn(`Item with UUID ${itemUuid} not found for table result ${itemText}`);
+        }
+      } else {
+        console.log(`Skipping duplicate item: ${itemText} (UUID: ${itemUuid})`);
+      }
+    } else {
+      console.log(`No UUID for table result ${itemText}, creating as consumable`);
+      rolledItems.push({ name: itemText, type: "consumable", system: { quantity: 1 } });
+      if (!allowDuplicates) rolledResults.add(itemText);
+    }
+  }
+
+  return rolledItems;
+}
+
 export async function openConversionDialog(tokens = null) {
   const targetTokens = tokens || canvas.tokens.controlled;
 
@@ -30,19 +82,18 @@ export async function openConversionDialog(tokens = null) {
           if (!form) return;
 
           const results = [];
-          const templateActor = game.actors.find(actor => actor.name === "Lootable Template" && actor.type === "npc");
-
-          console.log(`Checking for Lootable Template actor: ${!!templateActor}`);
-
-          if (!templateActor) {
-            ui.notifications.error("Lootable Template actor not found! Please ensure it exists.");
+          const templateActor = game.actors.getName("Lootable Template");
+          if (!templateActor || templateActor.type !== "npc") {
+            ui.notifications.error("Lootable Template actor not found or invalid! Please ensure it exists and is an NPC.");
             return;
           }
 
-          // Get the prototype token settings from the template actor
-          const prototypeTokenData = templateActor.prototypeToken.toObject();
-          const displayName = prototypeTokenData.displayName || CONST.TOKEN_DISPLAY_MODES.HOVER;
-          const displayNameVisibility = prototypeTokenData.displayNameVisibility || CONST.TOKEN_DISPLAY_MODES.EVERYONE;
+          console.log(`Using Lootable Template actor: ${templateActor.name}, ID: ${templateActor.id}`);
+
+          if (!canvas.scene) {
+            ui.notifications.error("No active scene found. Please ensure a scene is active.");
+            return;
+          }
 
           for (const token of targetTokens) {
             const lootable = form.querySelector(`input[name="lootable-${token.id}"]`).checked;
@@ -52,85 +103,136 @@ export async function openConversionDialog(tokens = null) {
 
             let processedToken = token;
 
-            if (lootable) {
-              try {
-                console.log(`Using Lootable Template actor with ID: ${templateActor.id}`);
-
-                // Parse data from the original token
-                const originalActor = token.actor;
-                const tokenImage = token.document.texture.src; // Get the token image
-                const originalName = originalActor.name;
-                const newName = `${originalName}'s Remains`; // Append "’s Remains"
-                const inventoryItems = originalActor.items.map(item => item.toObject()); // Parse items
-                const currency = foundry.utils.deepClone(originalActor.system.currency); // Parse currency
-
-                console.log(`Parsed data for ${token.name}: image=${tokenImage}, name=${newName}, items=${inventoryItems.length}, currency=`, currency);
-
-                // Delete the original token
-                await canvas.scene.deleteEmbeddedDocuments("Token", [token.id]);
-                console.log(`Deleted original token ${token.name}`);
-
-                // Create a new token from the Lootable Template actor with prototype settings
-                const tokenPosition = token.document.toObject();
-                const newTokenData = {
-                  actorId: templateActor.id, // Initially link to the template to inherit prototype settings
-                  x: tokenPosition.x,
-                  y: tokenPosition.y,
-                  rotation: tokenPosition.rotation,
-                  elevation: tokenPosition.elevation,
-                  hidden: tokenPosition.hidden,
-                  texture: {
-                    src: tokenImage // Use the original token image
-                  },
-                  displayName: displayName,
-                  displayNameVisibility: displayNameVisibility
-                };
-                const [newTokenDoc] = await canvas.scene.createEmbeddedDocuments("Token", [newTokenData]);
-                processedToken = canvas.tokens.get(newTokenDoc.id);
-                console.log(`Created new token ${processedToken.name} from Lootable Template with prototype settings`);
-
-                // Update the new token's actor data and token name (unlinked), with player ownership
-                await processedToken.actor.update({
-                  name: newName,
-                  img: tokenImage,
-                  items: inventoryItems,
-                  system: {
-                    currency
-                  },
-                  flags: {
-                    "core.sheetClass": "vikarov-procurement.LootSheetVikarov",
-                    "vikarov-procurement": { lootable: true, harvestable: !!harvestable }
-                  }
-                });
-                await processedToken.document.update({
-                  name: newName, // Update the token's display name
-                  actorLink: false, // Ensure the token becomes unlinked
-                  displayName: displayName, // Preserve the display name setting
-                  displayNameVisibility: displayNameVisibility, // Preserve the visibility setting
-                  ownership: {
-                    [game.user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER, // GM retains full control
-                    default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER // All players get observer access
-                  }
-                });
-                console.log(`Updated token ${processedToken.name} with parsed data, now unlinked with player ownership`);
-              } catch (error) {
-                console.error(`Failed to convert token ${token.name}:`, error);
-              }
-            } else if (harvestable) {
-              await processedToken.document.setFlag("vikarov-procurement", "harvestable", true);
-              console.log(`Updated harvestable flag for ${processedToken.name}`);
+            const actorType = token.actor?.system?.details?.type?.value?.toLowerCase() || "unknown";
+            if (harvestable && actorType === "humanoid") {
+              ui.notifications.warn(`Cannot harvest ${token.name}: Humanoids are not harvestable due to ethical concerns.`);
+              continue;
             }
 
-            results.push({
-              id: processedToken.id,
-              name: processedToken.name,
-              lootable,
-              harvestable
-            });
+            if (lootable || (harvestable && HARVESTABLE_TYPES.includes(actorType))) {
+              try {
+                if (lootable) {
+                  // Parse data from the original token
+                  const originalActor = token.actor;
+                  const tokenImage = token.document.texture.src;
+                  const originalName = originalActor.name;
+                  const newName = `${originalName}'s Remains`;
+                  const inventoryItems = originalActor.items
+                    .filter(item => {
+                      const validTypes = ["consumable", "container", "equipment", "loot", "tool", "weapon"];
+                      if (!validTypes.includes(item.type)) return false;
+                      if (item.type === "weapon") {
+                        const weaponType = item.system?.weaponType || "";
+                        const validWeaponTypes = ["simpleM", "simpleR", "martialM", "martialR"];
+                        return validWeaponTypes.includes(weaponType);
+                      }
+                      return true;
+                    })
+                    .map(item => item.toObject());
+                  const currency = foundry.utils.deepClone(originalActor.system.currency);
+                  const lootTableId = originalActor.getFlag("vikarov-procurement", "lootTable") || "";
+                  const reagentTableId = originalActor.getFlag("vikarov-procurement", "reagentTable") || "";
+                  const numberOfPulls = originalActor.getFlag("vikarov-procurement", "numberOfPullsOverride") || getSetting("numberOfPulls") || 1;
+                  const allowDuplicates = originalActor.getFlag("vikarov-procurement", "allowDuplicates") || false;
+
+                  console.log(`Parsed data for ${token.name}: image=${tokenImage}, name=${newName}, items=${inventoryItems.length}, currency=`, currency);
+
+                  // Roll on tables to get additional items
+                  const tableItems = [];
+                  if (harvestable && reagentTableId) {
+                    const reagentItems = await rollAndPopulateItems(reagentTableId, numberOfPulls, allowDuplicates);
+                    tableItems.push(...reagentItems);
+                  }
+                  if (lootable && lootTableId) {
+                    const lootItems = await rollAndPopulateItems(lootTableId, numberOfPulls, allowDuplicates);
+                    tableItems.push(...lootItems);
+                  }
+
+                  // Combine original items and table-rolled items
+                  const allItems = [...inventoryItems, ...tableItems];
+
+                  // Create a new token using the Lootable Template actor's ID
+                  const newTokenData = {
+                    actorId: templateActor.id, // Use the existing Lootable Template actor
+                    x: token.x,
+                    y: token.y,
+                    rotation: token.rotation,
+                    elevation: token.elevation,
+                    hidden: token.hidden,
+                    texture: {
+                      src: tokenImage,
+                      scaleX: token.document.texture.scaleX || 1,
+                      scaleY: token.document.texture.scaleY || 1
+                    },
+                    width: token.document.width,
+                    height: token.document.height,
+                    ownership: {
+                      [game.user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER,
+                      default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER
+                    }
+                  };
+
+                  console.log(`Creating new token with data:`, newTokenData);
+                  const newTokens = await canvas.scene.createEmbeddedDocuments("Token", [newTokenData]);
+                  if (!newTokens || newTokens.length === 0) {
+                    throw new Error("Failed to create new token for conversion.");
+                  }
+
+                  const newTokenDoc = newTokens[0];
+                  processedToken = canvas.tokens.get(newTokenDoc.id);
+
+                  // Update the token's name
+                  await newTokenDoc.update({ name: newName });
+
+                  // Update the actor's data (items and currency) while retaining the original actor ID
+                  const actor = newTokenDoc.actor;
+                  await actor.update({
+                    img: tokenImage,
+                    items: allItems,
+                    system: { currency },
+                    flags: {
+                      "vikarov-procurement": {
+                        lootable: true,
+                        harvestable: !!harvestable
+                      }
+                    }
+                  });
+
+                  // Verify the actor link
+                  console.log(`New token created: ${processedToken.name}, ID: ${newTokenDoc.id}`);
+                  console.log(`Linked actor:`, actor ? actor.toObject() : "None");
+
+                  if (!actor) {
+                    throw new Error("New token created without a linked actor!");
+                  }
+
+                  // Delete the original token
+                  await canvas.scene.deleteEmbeddedDocuments("Token", [token.id]);
+                  console.log(`Deleted original token ${token.name}`);
+
+                  if (allItems.length > 0) {
+                    ui.notifications.info(`Added ${allItems.length} item(s) to ${newName}.`);
+                  }
+                } else if (harvestable) {
+                  await processedToken.document.setFlag("vikarov-procurement", "harvestable", true);
+                  console.log(`Updated harvestable flag for ${processedToken.name}`);
+                }
+
+                results.push({
+                  id: processedToken.id,
+                  name: processedToken.name,
+                  lootable,
+                  harvestable
+                });
+              } catch (error) {
+                console.error(`Failed to convert token ${token.name}:`, error);
+                ui.notifications.error(`Failed to convert ${token.name}: ${error.message}`);
+              }
+            }
           }
 
           console.log("Processed tokens:", results);
-          ui.notifications.info(`${results.length} tokens processed for procurement`);
+          ui.notifications.info(`${results.length} tokens converted for procurement`);
         }
       },
       close: {

@@ -1,2 +1,66 @@
-<!-- Placeholder -->
-<div class="vikarov-container">Coming soon!</div>
+<div class="vikarov-container reagent-table-ui">
+  <div class="table-list-pane">
+    <h3>Reagent Tables</h3>
+    <ul class="table-list">
+      {{#each tables}}
+        <li class="table-item {{#if (eq ../selectedTableId this.id)}}selected{{/if}}" data-table-id="{{this.id}}">{{this.name}}</li>
+      {{/each}}
+    </ul>
+    {{#if isGM}}
+      <button class="create-table-btn">Create New Table</button>
+    {{/if}}
+  </div>
+  <div class="table-content-pane">
+    {{#if tableData}}
+      {{#if editMode}}
+        <form class="reagent-table-form">
+          <div class="form-group">
+            <label>Table Name</label>
+            <input type="text" name="tableName" value="{{tableData.name}}" />
+          </div>
+          <div class="form-group">
+            <label>Description (GM Notes)</label>
+            <textarea name="description" rows="3">{{tableData.description}}</textarea>
+          </div>
+          <div class="reagent-table-entries reagent-table-entry-dropzone">
+            {{#each tableData.results}}
+              <div class="reagent-table-entry" data-id="{{this.id}}" data-item-uuid="{{this.uuid}}">
+                <div class="item-icon"><img src="{{this.icon}}" alt="{{this.name}}" /></div>
+                <span class="item-name">{{this.name}}</span>
+                <input type="number" name="weight-{{this.id}}" value="{{this.weight}}" min="1" />
+                <button class="delete-entry-btn" type="button">Delete</button>
+              </div>
+            {{else}}
+              <p class="drop-placeholder">Drag items here to add them</p>
+            {{/each}}
+          </div>
+          <div class="form-actions">
+            <button class="save-table-btn">Save</button>
+            <button class="cancel-table-btn" type="button">Cancel</button>
+            <button class="delete-table-btn" type="button">Delete</button>
+          </div>
+        </form>
+      {{else}}
+        <h2>{{tableData.name}}</h2>
+        <p>{{tableData.description}}</p>
+        <div class="reagent-table-entries">
+          {{#each tableData.results}}
+            <div class="reagent-table-entry" data-id="{{this.id}}" data-item-uuid="{{this.uuid}}">
+              <div class="item-icon"><img src="{{this.icon}}" alt="{{this.name}}" /></div>
+              <span class="item-name">{{this.name}}</span>
+              <span>Weight: {{this.weight}}</span>
+            </div>
+          {{else}}
+            <p>No entries in this table.</p>
+          {{/each}}
+        </div>
+        {{#if isGM}}
+          <button class="edit-table-btn">Edit</button>
+          <button class="test-roll-btn">Test Roll</button>
+        {{/if}}
+      {{/if}}
+    {{else}}
+      <p>Select a table or create a new one.</p>
+    {{/if}}
+  </div>
+</div>

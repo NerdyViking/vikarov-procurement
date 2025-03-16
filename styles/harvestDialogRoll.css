@@ -1,0 +1,166 @@
+.window-header.flexrow.draggable {
+    opacity: 1;
+}
+
+/* Target the outer dialog to override default Foundry styles */
+.dialog .roll-dialog {
+    border: none; /* No additional border inside */
+    border-radius: 5px;
+    font-family: "Signika", sans-serif;
+    height: auto;
+  }
+  
+  /* Inner container for the roll dialog */
+  .dialog .roll-dialog {
+    border: none; /* No additional border inside */
+    border-radius: 5px;
+  }
+  
+  /* Header styling */
+  .dialog .roll-dialog .roll-dialog-header {
+    display: flex;
+    justify-content: center;
+    padding: 2px 5px;
+  }
+  
+  /* Icon styling */
+  .dialog .roll-dialog .roll-dialog-icon {
+    margin-right: 5px;
+  }
+  
+  /* Title (empty, hidden) */
+  .dialog .roll-dialog .roll-dialog-title {
+    flex-grow: 1;
+    margin: 0;
+    line-height: 1.2;
+    display: block;
+    border-bottom: none;
+  }
+  
+  /* Subtitle (centered) */
+  .dialog .roll-dialog .roll-dialog-subtitle {
+    margin: 0 5px;
+    line-height: 1.2;
+    text-align: center;
+    width: 100%; /* Ensure it takes full width for centering */
+    display: flex;
+    flex-direction: column;
+    border-bottom: none;
+  }
+  
+  /* Content styling */
+  .dialog .roll-dialog .roll-dialog-window-content {
+    padding: 5px;
+  }
+  
+  /* Rolls section */
+  .dialog .roll-dialog .roll-dialog-rolls {
+    text-align: center;
+    margin-bottom: 5px;
+  }
+  
+  .dialog .roll-dialog .roll-dialog-dice.centered {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2px;
+  }
+  
+  .dialog .roll-dialog .roll-dialog-dice.centered img {
+    width: 70px;
+    height: 70px;
+    margin-left: 12px;
+  }
+  
+  .dialog .roll-dialog .roll-dialog-formulas {
+    padding: 0;
+  }
+  
+  .dialog .roll-dialog .roll-dialog-formulas div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+  }
+  
+  .dialog .roll-dialog .roll-dialog-formula-line {
+    display: flex;
+    align-items: left;
+    margin-right: 5px;
+  }
+  
+  .dialog .roll-dialog .roll-dialog-formula {
+    font-size: 1.1em;
+    margin-left: 12px;
+  }
+  
+  /* Form group styling */
+  .dialog .roll-dialog .roll-dialog-form-group {
+    margin-bottom: 5px;
+  }
+  
+  .dialog .roll-dialog .roll-dialog-form-group label {
+    display: block;
+    font-size: 0.8em;
+    margin-bottom: 2px;
+  }
+  
+  /* Input fields */
+  .dialog .roll-dialog .roll-dialog-form-fields select,
+  .dialog .roll-dialog .roll-dialog-form-fields input {
+    width: 100%;
+    padding: 3px;
+    border: 1px solid #444;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  
+  .dialog .roll-dialog .roll-dialog-full-width {
+    width: 100%;
+  }
+  
+  /* Configuration fieldset */
+  .dialog .roll-dialog .roll-dialog-fieldset {
+    border: 1px solid #444 !important;
+    border-radius: 3px;
+    gap: 0 !important;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 8px;
+    padding-top: 0px;
+  }
+  
+  .dialog .roll-dialog legend {
+    padding: 0 3px;
+    font-size: 0.8rem;
+  }
+  
+  /* Dialog buttons */
+  .dialog .roll-dialog ~ .dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+  }
+  
+  .dialog .roll-dialog ~ .dialog-buttons button {
+    flex-grow: 1;
+    padding: 3px 8px;
+    background: #444;
+    border: 1px solid #555;
+    cursor: pointer;
+    border-radius: 3px;
+    margin: 0 3px;
+    font-size: 0.9em;
+  }
+  
+  .dialog .roll-dialog ~ .dialog-buttons button:hover {
+    background: #555;
+  }
+  
+  .dialog .roll-dialog ~ .dialog-buttons button[data-button="normal"] {
+    background: #333;
+    border: 1px solid #666;
+  }
+  
+  .dialog .roll-dialog ~ .dialog-buttons button[data-button="normal"]:hover {
+    background: #444;
+  }

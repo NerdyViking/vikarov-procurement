@@ -47,21 +47,30 @@
       </div>
     </div>
     <div class="form-group grid-item r3c2">
+      <label>Allow Duplicates</label>
+      <div class="input-container">
+        <input type="checkbox" name="allowDuplicates" {{checked allowDuplicates}} />
+        <p class="hint">Allow duplicate items when rolling on reagent tables.</p>
+      </div>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="form-group grid-item r4c1">
       <label>Loot Chance Override (%)</label>
       <div class="input-container">
         <input type="number" name="lootChanceOverride" value="{{lootChanceOverride}}" placeholder="{{globalLootChance}} (default)" />
         <p class="hint">Leave empty to use the default value ({{globalLootChance}}).</p>
       </div>
     </div>
-
-    <!-- Row 4 -->
-    <div class="form-group grid-item r4c1">
+    <div class="form-group grid-item r4c2">
       <label>Description</label>
       <div class="input-container">
         <textarea name="description" rows="3" placeholder="Optional description for immersion (e.g., 'A pile of bones and tattered cloth')">{{description}}</textarea>
       </div>
     </div>
-    <div class="form-group grid-item r4c2">
+
+    <!-- Row 5 -->
+    <div class="form-group grid-item r5c2">
       <button type="submit" class="vikarov-submit-button">Save</button>
       <button type="button" class="vikarov-cancel-button">Cancel</button>
     </div>
