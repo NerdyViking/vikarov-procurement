@@ -1,6 +1,6 @@
-<div class="vikarov-container">
-  {{#if tokens.length}}
-    <form class="vikarov-conversion-form">
+<form class="vikarov-conversion-form" data-application-part="conversion-form">
+  <div class="vikarov-container">
+    {{#if tokens.length}}
       <table>
         <thead>
           <tr>
@@ -19,8 +19,8 @@
           {{/each}}
         </tbody>
       </table>
-    </form>
-  {{else}}
-    <p>No tokens available yet!</p>
-  {{/if}}
-</div>
+    {{else}}
+      <p>No tokens available yet!</p>
+    {{/if}}
+  </div>
+</form>

@@ -1,12 +1,12 @@
-<div class="roll-dialog">
-  <header class="roll-dialog-header">
-    <i class="roll-dialog-icon fa-fw fa-solid fa-dice"></i>
-    <div class="roll-dialog-title-subtitle">
-      <h1 class="roll-dialog-title"></h1>
-      <h2 class="roll-dialog-subtitle">{{subtitle}}</h2>
-    </div>
-  </header>
-  <form class="roll-dialog-window-content standard-form">
+<form class="roll-dialog-window-content standard-form" data-application-part="roll-form">
+  <div class="roll-dialog">
+    <header class="roll-dialog-header">
+      <i class="roll-dialog-icon fa-fw fa-solid fa-dice"></i>
+      <div class="roll-dialog-title-subtitle">
+        <h1 class="roll-dialog-title"></h1>
+        <h2 class="roll-dialog-subtitle">{{subtitle}}</h2>
+      </div>
+    </header>
     <div class="roll-dialog-rolls" data-application-part="formulas">
       <div class="roll-dialog-dice centered">
         <img src="systems/dnd5e/icons/svg/dice/d20.svg" alt="d20">
@@ -38,14 +38,14 @@
       <div class="roll-dialog-form-group">
         <label>Roll Mode</label>
         <div class="roll-dialog-form-fields">
-            <select name="rollMode">
+          <select name="rollMode">
             <option value="public" selected>Public Roll</option>
             <option value="private">Private GM Roll</option>
             <option value="blind">Blind GM Roll</option>
             <option value="self">Self Roll</option>
-            </select>
+          </select>
         </div>
       </div>
     </fieldset>
-  </form>
-</div>
+  </div>
+</form>

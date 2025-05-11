@@ -1,14 +1,14 @@
-<div class="vikarov-container">
-  <h2>Harvest {{token.name}}</h2>
-  <div class="harvest-info">
-    <img src="{{token.texture.src}}" alt="{{token.name}}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;" />
-    <div class="details">
-      <p><strong>Creature Type:</strong> {{creatureType}}</p>
-      <p><strong>Challenge Rating:</strong> {{cr}}</p>
-      <p><strong>DC:</strong> {{dc}}</p>
+<form class="vikarov-harvest-form" data-application-part="harvest-form">
+  <div class="vikarov-container">
+    <h2>Harvest {{token.name}}</h2>
+    <div class="harvest-info">
+      <img src="{{token.texture.src}}" alt="{{token.name}}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;" />
+      <div class="details">
+        <p><strong>Creature Type:</strong> {{creatureType}}</p>
+        <p><strong>Challenge Rating:</strong> {{cr}}</p>
+        <p><strong>DC:</strong> {{dc}}</p>
+      </div>
     </div>
-  </div>
-  <form class="vikarov-harvest-form">
     <div class="form-group">
       <label for="skill-select">Skill Check:</label>
       <select id="skill-select" name="skill">
@@ -17,5 +17,5 @@
         {{/each}}
       </select>
     </div>
-  </form>
-</div>
+  </div>
+</form>

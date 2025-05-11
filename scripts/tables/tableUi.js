@@ -1,25 +1,46 @@
 console.log("Vikarov’s Guide to Procurement: tableUi.js loaded");
 
-export class ReagentTableDialog extends FormApplication {
+import { HandlebarsApplicationMixin } from "foundry/client/apps/api/index.mjs";
+
+export class ReagentTableDialog extends HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
   constructor(options = {}) {
-    super(null, options);
+    super(options);
     this.selectedTableId = null;
     this.editMode = false;
   }
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
+  static DEFAULT_OPTIONS = {
+    id: "reagent-table-dialog",
+    classes: ["vikarov", "reagent-table-dialog"],
+    tag: "form",
+    window: {
       title: "Reagent Tables",
-      template: "modules/vikarov-procurement/templates/tableUi.hbs",
+      resizable: true
+    },
+    position: {
       width: 800,
-      height: 600,
-      resizable: true,
-      classes: ["vikarov", "reagent-table-dialog"],
-      dragDrop: [{ dragSelector: null, dropSelector: ".reagent-table-entry-dropzone" }]
-    });
-  }
+      height: 600
+    },
+    actions: {
+      "select-table": this._onSelectTable,
+      "create-table": this._onCreateTable,
+      "edit-table": this._onEditTable,
+      "save-table": this._onSaveTable,
+      "cancel-table": this._onCancelTable,
+      "delete-table": this._onDeleteTable,
+      "delete-entry": this._onDeleteEntry,
+      "open-item-sheet": this._onOpenItemSheet,
+      "test-roll": this._onTestRoll
+    }
+  };
 
-  getData() {
+  static PARTS = {
+    main: {
+      template: "templates/tableUi.hbs"
+    }
+  };
+
+  async _prepareContext(options) {
     const reagentTables = game.tables.filter(t => t.getFlag("vikarov-procurement", "reagentTable"));
     let selectedTable = this.selectedTableId ? game.tables.get(this.selectedTableId) : null;
 
@@ -61,143 +82,173 @@ export class ReagentTableDialog extends FormApplication {
     };
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
+  _configureRenderOptions(options) {
+    super._configureRenderOptions(options);
+    options.form = {
+      submitOnChange: false,
+      closeOnSubmit: false
+    };
+  }
 
-    // Table selection
-    html.find(".table-item").on("click", (event) => {
-      this.selectedTableId = event.currentTarget.dataset.tableId;
-      this.editMode = false;
-      this.render(true);
-    });
+  _onRender(context, options) {
+    super._onRender(context, options);
+    if (!(this.element instanceof HTMLElement)) return;
 
-    // Create new table
-    html.find(".create-table-btn").on("click", async () => {
-      const newTable = await RollTable.create({
-        name: "New Reagent Table",
-        description: "A new table for reagents",
-        flags: { "vikarov-procurement": { reagentTable: true } }
+    const form = this.element.querySelector(".reagent-table-form");
+    if (form) {
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        this._onSaveTable(event);
       });
-      this.selectedTableId = newTable.id;
-      this.editMode = true;
-      this.render(true);
-    });
+    }
 
-    // Edit mode toggle
-    html.find(".edit-table-btn").on("click", () => {
-      this.editMode = true;
-      this.render(true);
-    });
-
-    // Save changes
-    html.find(".save-table-btn").on("click", async (event) => {
-      event.preventDefault();
-      const formData = new FormData(html.find(".reagent-table-form")[0]);
-      const table = game.tables.get(this.selectedTableId);
-      if (!table) return;
-
-      const existingResults = table.results.reduce((acc, r) => ({ ...acc, [r.id]: r }), {});
-      const updates = [];
-      const creates = [];
-      html.find(".reagent-table-entry").each((i, entry) => {
-        const id = entry.dataset.id;
-        const uuid = entry.dataset.itemUuid;
-        const name = entry.querySelector(".item-name").textContent;
-        const weight = parseInt(formData.get(`weight-${id}`)) || 1;
-        if (uuid) {
-          if (existingResults[id]) {
-            updates.push({
-              _id: id,
-              text: name,
-              weight: weight,
-              flags: { "vikarov-procurement": { itemUuid: uuid } }
-            });
-          } else {
-            creates.push({
-              type: CONST.TABLE_RESULT_TYPES.DOCUMENT,
-              text: name,
-              weight: weight,
-              range: [1, 1],
-              documentCollection: "Item",
-              documentId: uuid.split(".").pop(),
-              flags: { "vikarov-procurement": { itemUuid: uuid } }
-            });
-          }
-        }
-      });
-
-      if (updates.length > 0) await table.updateEmbeddedDocuments("TableResult", updates);
-      if (creates.length > 0) await table.createEmbeddedDocuments("TableResult", creates);
-
-      await table.update({
-        name: formData.get("tableName"),
-        description: formData.get("description")
-      });
-
-      this.editMode = false;
-      this.render(true);
-      ui.notifications.info(`Table ${table.name} updated.`);
-    });
-
-    // Cancel edit
-    html.find(".cancel-table-btn").on("click", () => {
-      this.editMode = false;
-      this.render(true);
-    });
-
-    // Delete table
-    html.find(".delete-table-btn").on("click", async () => {
-      const table = game.tables.get(this.selectedTableId);
-      if (!table) return;
-      await Dialog.confirm({
-        title: "Delete Table",
-        content: `Are you sure you want to delete ${table.name}?`,
-        yes: async () => {
-          await table.delete();
-          this.selectedTableId = null;
-          this.editMode = false;
-          this.render(true);
-          ui.notifications.info(`Table ${table.name} deleted.`);
+    this.element.querySelectorAll("[data-action]").forEach(element => {
+      element.addEventListener("click", (event) => {
+        const action = element.dataset.action;
+        if (this.constructor.DEFAULT_OPTIONS.actions[action]) {
+          this.constructor.DEFAULT_OPTIONS.actions[action].call(this, event);
         }
       });
     });
 
-    // Delete entry
-    html.find(".delete-entry-btn").on("click", async (event) => {
-      const entry = $(event.currentTarget).closest(".reagent-table-entry");
-      const id = entry.data("id");
-      const table = game.tables.get(this.selectedTableId);
-      if (table && id) {
-        await table.deleteEmbeddedDocuments("TableResult", [id]);
-        this.render(true);
-        ui.notifications.info("Entry deleted.");
-      }
-    });
+    // Setup drag-and-drop
+    const dropZone = this.element.querySelector(".reagent-table-entry-dropzone");
+    if (dropZone) {
+      dropZone.addEventListener("dragover", (event) => event.preventDefault());
+      dropZone.addEventListener("drop", (event) => this._onDrop(event));
+    }
+  }
 
-    // Open item sheet (only on name or icon)
-    html.find(".item-name, .item-icon").on("click", async (event) => {
-      event.stopPropagation();
-      const entry = $(event.currentTarget).closest(".reagent-table-entry");
-      const uuid = entry.data("itemUuid");
+  async _onSelectTable(event) {
+    this.selectedTableId = event.currentTarget.dataset.tableId;
+    this.editMode = false;
+    await this.render();
+  }
+
+  async _onCreateTable() {
+    const newTable = await RollTable.create({
+      name: "New Reagent Table",
+      description: "A new table for reagents",
+      flags: { "vikarov-procurement": { reagentTable: true } }
+    });
+    this.selectedTableId = newTable.id;
+    this.editMode = true;
+    await this.render();
+  }
+
+  async _onEditTable() {
+    this.editMode = true;
+    await this.render();
+  }
+
+  async _onSaveTable(event) {
+    event.preventDefault();
+    const form = this.element.querySelector(".reagent-table-form");
+    if (!form) return;
+
+    const formData = new FormData(form);
+    const table = game.tables.get(this.selectedTableId);
+    if (!table) return;
+
+    const existingResults = table.results.reduce((acc, r) => ({ ...acc, [r.id]: r }), {});
+    const updates = [];
+    const creates = [];
+    this.element.querySelectorAll(".reagent-table-entry").forEach(entry => {
+      const id = entry.dataset.id;
+      const uuid = entry.dataset.itemUuid;
+      const name = entry.querySelector(".item-name").textContent;
+      const weight = parseInt(formData.get(`weight-${id}`)) || 1;
       if (uuid) {
-        const item = await fromUuid(uuid);
-        if (item) item.sheet.render(true);
+        if (existingResults[id]) {
+          updates.push({
+            _id: id,
+            text: name,
+            weight: weight,
+            flags: { "vikarov-procurement": { itemUuid: uuid } }
+          });
+        } else {
+          creates.push({
+            type: CONST.TABLE_RESULT_TYPES.DOCUMENT,
+            text: name,
+            weight: weight,
+            range: [1, 1],
+            documentCollection: "Item",
+            documentId: uuid.split(".").pop(),
+            flags: { "vikarov-procurement": { itemUuid: uuid } }
+          });
+        }
       }
     });
 
-    // Test roll
-    html.find(".test-roll-btn").on("click", async () => {
-      const table = game.tables.get(this.selectedTableId);
-      if (!table) return;
-      const result = await table.roll();
-      const items = result.results.map(r => r.text).join(", ");
-      ui.notifications.info(`Test roll result: ${items}`);
+    if (updates.length > 0) await table.updateEmbeddedDocuments("TableResult", updates);
+    if (creates.length > 0) await table.createEmbeddedDocuments("TableResult", creates);
+
+    await table.update({
+      name: formData.get("tableName"),
+      description: formData.get("description")
     });
+
+    this.editMode = false;
+    await this.render();
+    ui.notifications.info(`Table ${table.name} updated.`);
+  }
+
+  _onCancelTable() {
+    this.editMode = false;
+    this.render();
+  }
+
+  async _onDeleteTable() {
+    const table = game.tables.get(this.selectedTableId);
+    if (!table) return;
+
+    await DialogV2.confirm({
+      window: { title: "Delete Table" },
+      content: `Are you sure you want to delete ${table.name}?`,
+      modal: true,
+      yes: async () => {
+        await table.delete();
+        this.selectedTableId = null;
+        this.editMode = false;
+        await this.render();
+        ui.notifications.info(`Table ${table.name} deleted.`);
+      }
+    });
+  }
+
+  async _onDeleteEntry(event) {
+    const entry = event.currentTarget.closest(".reagent-table-entry");
+    const id = entry.dataset.id;
+    const table = game.tables.get(this.selectedTableId);
+    if (table && id) {
+      await table.deleteEmbeddedDocuments("TableResult", [id]);
+      await this.render();
+      ui.notifications.info("Entry deleted.");
+    }
+  }
+
+  async _onOpenItemSheet(event) {
+    event.stopPropagation();
+    const entry = event.currentTarget.closest(".reagent-table-entry");
+    const uuid = entry.dataset.itemUuid;
+    if (uuid) {
+      const item = await fromUuid(uuid);
+      if (item) item.sheet.render(true);
+    }
+  }
+
+  async _onTestRoll() {
+    const table = game.tables.get(this.selectedTableId);
+    if (!table) return;
+    const result = await table.roll();
+    const items = result.results.map(r => r.text).join(", ");
+    ui.notifications.info(`Test roll result: ${items}`);
   }
 
   async _onDrop(event) {
     if (!this.editMode || !game.user.isGM) return;
-    const data = TextEditor.getDragEventData(event);
+    event.preventDefault();
+    const data = JSON.parse(event.dataTransfer.getData("text/plain"));
     if (data.type !== "Item") return;
 
     const item = await Item.fromDropData(data);
@@ -217,7 +268,7 @@ export class ReagentTableDialog extends FormApplication {
     };
 
     await table.createEmbeddedDocuments("TableResult", [newResult]);
-    this.render(true);
+    await this.render();
     ui.notifications.info(`Added ${item.name} to ${table.name}.`);
   }
 }

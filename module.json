@@ -2,7 +2,7 @@
   "id": "vikarov-procurement",
   "title": "Vikarov’s Guide to Procurement",
   "description": "A module for Foundry VTT that enhances post-combat looting and harvesting for D&D 5e.",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "authors": [
     {
       "name": "YourNameHere",
@@ -10,37 +10,39 @@
     }
   ],
   "compatibility": {
-    "minimum": "12",
-    "verified": "12.331"
+    "minimum": "13",
+    "verified": "13.342"
   },
   "systems": [
     {
       "id": "dnd5e",
-      "version": "4.3.6"
+      "version": "5.0.2"
     }
   ],
   "esmodules": [
-    "scripts/shared/main.js",
-    "scripts/shared/settings.js",
-    "scripts/shared/utils.js",
-    "scripts/shared/constants.js",
-    "scripts/lootables/sidebarButtons.js",
-    "scripts/lootables/conversion.js",
-    "scripts/lootables/actorConfig.js",
-    "scripts/lootables/lootSheet.js",
-    "scripts/harvesting/harvestSystem.js",
+    "scripts/core/main.js",
+    "scripts/core/settings.js",
+    "scripts/core/utils.js",
+    "scripts/loot/sidebarButtons.js",
+    "scripts/loot/conversion.js",
+    "scripts/loot/actorConfig.js",
+    "scripts/loot/lootSheet.js",
+    "scripts/harvest/harvestSystem.js",
     "scripts/tables/tableUi.js"
   ],
   "styles": [
-    "styles/vikarov.css",
-    "styles/harvestDialogRoll.css"
+    "styles/vikarov-procurement.css"
   ],
   "templates": [
+    "templates/configDialog.hbs",
+    "templates/conversionDialog.hbs",
     "templates/harvestDialog.hbs",
-    "templates/harvestDialogRoll.hbs"
+    "templates/harvestDialogRoll.hbs",
+    "templates/lootSheet.hbs",
+    "templates/tableUi.hbs"
   ],
   "url": "https://github.com/yourusername/vikarov-procurement",
   "manifest": "https://raw.githubusercontent.com/yourusername/vikarov-procurement/main/module.json",
-  "download": "https://github.com/yourusername/vikarov-procurement/releases/download/v0.1.0/module.zip",
+  "download": "https://github.com/yourusername/vikarov-procurement/releases/download/v0.2.0/module.zip",
   "readme": "README.md"
 }

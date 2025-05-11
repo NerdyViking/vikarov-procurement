@@ -1,4 +1,4 @@
-<form class="vikarov-loot-sheet-form">
+<form class="vikarov-loot-sheet-form" data-application-part="loot-sheet">
   <div class="vikarov-loot-sheet">
     <!-- Top Section -->
     <div class="top-section">
@@ -7,12 +7,12 @@
       </div>
       <div class="actor-info">
         {{#if isGM}}
-          <input type="text" class="actor-name" value="{{actor.name}}" {{#unless isEditable}}disabled{{/unless}} />
+          <input type="text" class="actor-name" value="{{actor.name}}" {{#unless isEditable}}disabled{{/unless}} data-action="update-name" />
         {{else}}
           <h1>{{actor.name}}</h1>
         {{/if}}
         <div class="actor-dropdown">
-          <select id="actor-select" name="actor-select">
+          <select id="actor-select" name="actor-select" data-action="select-actor">
             {{#each ownedActors}}
               <option value="{{this.id}}" {{selected (eq this.id selectedActorId)}}>{{this.name}}</option>
             {{/each}}
@@ -33,49 +33,49 @@
       <h2>Currency</h2>
       <div class="currency-grid">
         <div class="currency-item">
-          Platinum: 
+          Platinum:
           {{#if isGM}}
-            <input type="number" class="currency-input" name="system.currency.pp" value="{{currency.pp}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+            <input type="number" class="currency-input" name="system.currency.pp" value="{{currency.pp}}" min="0" {{#unless isEditable}}disabled{{/unless}} data-action="update-currency" />
           {{else}}
             {{currency.pp}}
           {{/if}}
         </div>
         <div class="currency-item">
-          Gold: 
+          Gold:
           {{#if isGM}}
-            <input type="number" class="currency-input" name="system.currency.gp" value="{{currency.gp}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+            <input type="number" class="currency-input" name="system.currency.gp" value="{{currency.gp}}" min="0" {{#unless isEditable}}disabled{{/unless}} data-action="update-currency" />
           {{else}}
             {{currency.gp}}
           {{/if}}
         </div>
         <div class="currency-item">
-          Electrum: 
+          Electrum:
           {{#if isGM}}
-            <input type="number" class="currency-input" name="system.currency.ep" value="{{currency.ep}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+            <input type="number" class="currency-input" name="system.currency.ep" value="{{currency.ep}}" min="0" {{#unless isEditable}}disabled{{/unless}} data-action="update-currency" />
           {{else}}
             {{currency.ep}}
           {{/if}}
         </div>
         <div class="currency-item">
-          Silver: 
+          Silver:
           {{#if isGM}}
-            <input type="number" class="currency-input" name="system.currency.sp" value="{{currency.sp}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+            <input type="number" class="currency-input" name="system.currency.sp" value="{{currency.sp}}" min="0" {{#unless isEditable}}disabled{{/unless}} data-action="update-currency" />
           {{else}}
             {{currency.sp}}
           {{/if}}
         </div>
         <div class="currency-item">
-          Copper: 
+          Copper:
           {{#if isGM}}
-            <input type="number" class="currency-input" name="system.currency.cp" value="{{currency.cp}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+            <input type="number" class="currency-input" name="system.currency.cp" value="{{currency.cp}}" min="0" {{#unless isEditable}}disabled{{/unless}} data-action="update-currency" />
           {{else}}
             {{currency.cp}}
           {{/if}}
         </div>
       </div>
       <div class="currency-actions">
-        <button class="split-gold-btn" type="button">Split Gold</button>
-        <button class="take-gold-btn" type="button">Take Gold</button>
+        <button class="split-gold-btn" type="button" data-action="split-gold">Split Gold</button>
+        <button class="take-gold-btn" type="button" data-action="take-gold">Take Gold</button>
       </div>
     </div>
 
@@ -89,24 +89,24 @@
               {{#each category.items}}
                 <div class="item-row" data-item-id="{{this._id}}">
                   <div class="item-icon">
-                    <img src="{{this.img}}" alt="{{this.name}}" />
+                    <img src="{{this.img}}" alt="{{this.name}}" data-action="open-item" />
                   </div>
-                  <div class="item-name" data-item-id="{{this._id}}">
+                  <div class="item-name" data-item-id="{{this._id}}" data-action="open-item">
                     <span class="item-link">{{this.name}}</span>
                     <span class="item-type">({{this.type}})</span>
                   </div>
                   <div class="item-quantity">
                     {{#if category.isGM}}
-                      <input type="number" class="quantity-input" data-item-id="{{this._id}}" value="{{#if this.system.quantity}}{{this.system.quantity}}{{else}}1{{/if}}" min="1" {{#unless category.isEditable}}disabled{{/unless}} />
+                      <input type="number" class="quantity-input" data-item-id="{{this._id}}" value="{{#if this.system.quantity}}{{this.system.quantity}}{{else}}1{{/if}}" min="1" {{#unless category.isEditable}}disabled{{/unless}} data-action="update-quantity" />
                     {{else}}
                       x{{#if this.system.quantity}}{{this.system.quantity}}{{else}}1{{/if}}
                     {{/if}}
                   </div>
                   <div class="item-actions">
-                    <button class="take-btn" data-item-id="{{this._id}}">Take</button>
-                    <button class="give-btn" data-item-id="{{this._id}}">Give</button>
+                    <button class="take-btn" data-item-id="{{this._id}}" data-action="take-item">Take</button>
+                    <button class="give-btn" data-item-id="{{this._id}}" data-action="give-item">Give</button>
                     {{#if category.isGM}}
-                      <button class="delete-btn" data-item-id="{{this._id}}">Delete</button>
+                      <button class="delete-btn" data-item-id="{{this._id}}" data-action="delete-item">Delete</button>
                     {{/if}}
                   </div>
                 </div>

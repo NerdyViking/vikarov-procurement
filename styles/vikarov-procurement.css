@@ -1,0 +1,635 @@
+/* Vikarov’s Guide to Procurement: Consolidated Styles */
+
+/* General styling for Vikarov dialogs */
+.vikarov-procurement {
+    font-family: "Signika", sans-serif;
+    padding: 10px;
+  }
+  
+  /* Procurement Config Dialog */
+  .vikarov-procurement.vikarov-procurement-config {
+    font-family: "Signika", sans-serif;
+    padding: 10px;
+  }
+  
+  .vikarov-procurement .vikarov-config-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto auto;
+    gap: 10px;
+  }
+  
+  .vikarov-procurement .form-group {
+    margin: 0;
+  }
+  
+  .vikarov-procurement .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .vikarov-procurement .form-group .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .vikarov-procurement .form-group input[type="checkbox"] {
+    margin: 0;
+  }
+  
+  .vikarov-procurement .form-group select,
+  .vikarov-procurement .form-group input[type="number"] {
+    width: 150px;
+    padding: 2px;
+  }
+  
+  .vikarov-procurement .form-group .hint {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .vikarov-procurement .grid-item.r1c1 { grid-column: 1; grid-row: 1; }
+  .vikarov-procurement .grid-item.r1c2 { grid-column: 2; grid-row: 1; }
+  .vikarov-procurement .grid-item.r2c1 { grid-column: 1; grid-row: 2; }
+  .vikarov-procurement .grid-item.r2c2 { grid-column: 2; grid-row: 2; }
+  .vikarov-procurement .grid-item.r3c1 { grid-column: 1; grid-row: 3; }
+  .vikarov-procurement .grid-item.r3c2 { grid-column: 2; grid-row: 3; }
+  .vikarov-procurement .grid-item.r4c1 { grid-column: 1; grid-row: 4; }
+  .vikarov-procurement .grid-item.r4c2 { grid-column: 2; grid-row: 4; }
+  
+  .vikarov-procurement .vikarov-submit-button,
+  .vikarov-procurement .vikarov-cancel-button {
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 80px;
+    text-align: center;
+  }
+  
+  .vikarov-procurement .vikarov-cancel-button {
+    background-color: #ccc;
+  }
+  
+  .vikarov-procurement .vikarov-config-container {
+    width: 18px !important;
+    height: 18px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+  
+  .vikarov-procurement .vikarov-config-icon {
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 9px;
+    margin-top: 4px;
+  }
+  
+  .vikarov-procurement .vikarov-config-icon:hover {
+    color: green !important;
+  }
+  
+  .vikarov-procurement .vikarov-edit-container {
+    width: 18px !important;
+    height: 18px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+  
+  .vikarov-procurement .vikarov-edit-toggle {
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 9px;
+    margin-top: 4px;
+  }
+  
+  .vikarov-procurement .vikarov-edit-toggle:hover {
+    color: blue !important;
+  }
+  
+  /* Loot Sheet */
+  .vikarov-procurement .vikarov-loot-sheet {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .top-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .actor-image {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .actor-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .actor-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .actor-info h1 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .actor-dropdown {
+    width: 100%;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .actor-dropdown select {
+    pointer-events: auto !important;
+    cursor: pointer;
+    width: 100%;
+    height: 25px;
+    padding: 2px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .actor-description {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 80px;
+    padding: 5px;
+    background-color: none;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .actor-description p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #333;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .currency-section {
+    margin-bottom: 15px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .currency-section h2 {
+    margin-top: 0;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .currency-grid {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .currency-item {
+    width: 60px;
+    text-align: center;
+    font-size: 0.9em;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .currency-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .currency-actions button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+    width: 100px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .currency-actions button:hover {
+    box-shadow: inset 0 0 5px red;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .sheet-body {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding-bottom: 50px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-category {
+    margin-bottom: 10px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px;
+    border-bottom: 1px solid #ccc;
+    height: 30px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-name {
+    flex: 1;
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-name:hover {
+    text-shadow: 0 0 5px red;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-name .item-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-quantity {
+    flex: 0 0 50px;
+    text-align: right;
+    padding-right: 5px;
+    order: 2;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-actions {
+    display: flex;
+    gap: 3px;
+    flex-shrink: 0;
+    order: 3;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-actions:not(:has(.delete-btn)) {
+    width: 120px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-actions:has(.delete-btn) {
+    width: 180px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-actions button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0 5px;
+    text-align: center;
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .item-actions button:hover {
+    box-shadow: inset 0 0 5px red;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .actor-name {
+    font-size: 1.5em;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 2px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .currency-input {
+    width: 50px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 2px;
+  }
+  
+  .vikarov-procurement .vikarov-loot-sheet .quantity-input {
+    width: 40px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 2px;
+    text-align: right;
+  }
+  
+  .vikarov-procurement .window-header .vikarov-edit-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin: 0 5px;
+    padding: 0;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .vikarov-procurement .window-header .vikarov-edit-toggle {
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    line-height: 18px;
+  }
+  
+  .vikarov-procurement .window-header .vikarov-edit-toggle:hover {
+    color: #00ff00;
+  }
+  
+  /* Harvest Dialog */
+  .vikarov-procurement .harvest-info {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .vikarov-procurement .details {
+    flex: 1;
+  }
+  
+  .vikarov-procurement .vikarov-harvest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .vikarov-procurement .vikarov-harvest-button,
+  .vikarov-procurement .vikarov-leave-button {
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100px;
+  }
+  
+  /* Reagent Table UI */
+  .vikarov-procurement .reagent-table-ui {
+    display: flex;
+    gap: 10px;
+    height: 100%;
+  }
+  
+  .vikarov-procurement .table-list-pane {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .vikarov-procurement .table-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+  }
+  
+  .vikarov-procurement .table-item {
+    padding: 5px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .vikarov-procurement .table-item.selected {
+    background-color: #ddd;
+    font-weight: bold;
+  }
+  
+  .vikarov-procurement .table-content-pane {
+    width: 70%;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
+  .vikarov-procurement .reagent-table-entries {
+    margin-top: 10px;
+  }
+  
+  .vikarov-procurement .reagent-table-entry {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .vikarov-procurement .reagent-table-entry .item-icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+  
+  .vikarov-procurement .reagent-table-entry .item-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .vikarov-procurement .reagent-table-entry .item-name {
+    flex: 1;
+  }
+  
+  .vikarov-procurement .reagent-table-entry .item-name:hover,
+  .vikarov-procurement .reagent-table-entry .item-icon:hover {
+    text-shadow: 0 0 5px red;
+  }
+  
+  .vikarov-procurement .reagent-table-entry input[type="number"] {
+    width: 60px;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .vikarov-procurement .reagent-table-entry button.delete-entry-btn {
+    padding: 2px 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    background: #fff;
+    width: auto;
+    min-width: 0;
+    white-space: nowrap;
+  }
+  
+  .vikarov-procurement .reagent-table-entry button.delete-entry-btn:hover {
+    background: #ffcccc;
+  }
+  
+  /* Harvest Roll Dialog */
+  .vikarov-procurement .window-header.flexrow.draggable {
+    opacity: 1;
+  }
+  
+  .vikarov-procurement .roll-dialog {
+    border: none;
+    border-radius: 5px;
+    font-family: "Signika", sans-serif;
+    height: auto;
+  }
+  
+  .vikarov-procurement .roll-dialog-header {
+    display: flex;
+    justify-content: center;
+    padding: 2px 5px;
+  }
+  
+  .vikarov-procurement .roll-dialog-icon {
+    margin-right: 5px;
+  }
+  
+  .vikarov-procurement .roll-dialog-title {
+    flex-grow: 1;
+    margin: 0;
+    line-height: 1.2;
+    display: block;
+    border-bottom: none;
+  }
+  
+  .vikarov-procurement .roll-dialog-subtitle {
+    margin: 0 5px;
+    line-height: 1.2;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-bottom: none;
+  }
+  
+  .vikarov-procurement .roll-dialog-window-content {
+    padding: 5px;
+  }
+  
+  .vikarov-procurement .roll-dialog-rolls {
+    text-align: center;
+    margin-bottom: 5px;
+  }
+  
+  .vikarov-procurement .roll-dialog-dice.centered {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2px;
+  }
+  
+  .vikarov-procurement .roll-dialog-dice.centered img {
+    width: 70px;
+    height: 70px;
+    margin-left: 12px;
+  }
+  
+  .vikarov-procurement .roll-dialog-formulas {
+    padding: 0;
+  }
+  
+  .vikarov-procurement .roll-dialog-formulas div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+  }
+  
+  .vikarov-procurement .roll-dialog-formula-line {
+    display: flex;
+    align-items: left;
+    margin-right: 5px;
+  }
+  
+  .vikarov-procurement .roll-dialog-formula {
+    font-size: 1.1em;
+    margin-left: 12px;
+  }
+  
+  .vikarov-procurement .roll-dialog-form-group {
+    margin-bottom: 5px;
+  }
+  
+  .vikarov-procurement .roll-dialog-form-group label {
+    display: block;
+    font-size: 0.8em;
+    margin-bottom: 2px;
+  }
+  
+  .vikarov-procurement .roll-dialog-form-fields select,
+  .vikarov-procurement .roll-dialog-form-fields input {
+    width: 100%;
+    padding: 3px;
+    border: 1px solid #444;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  
+  .vikarov-procurement .roll-dialog-full-width {
+    width: 100%;
+  }
+  
+  .vikarov-procurement .roll-dialog-fieldset {
+    border: 1px solid #444 !important;
+    border-radius: 3px;
+    gap: 0 !important;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 8px;
+    padding-top: 0px;
+  }
+  
+  .vikarov-procurement .roll-dialog legend {
+    padding: 0 3px;
+    font-size: 0.8rem;
+  }
+  
+  .vikarov-procurement .dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+  }
+  
+  .vikarov-procurement .dialog-buttons button {
+    flex-grow: 1;
+    padding: 3px 8px;
+    background: #444;
+    border: 1px solid #555;
+    cursor: pointer;
+    border-radius: 3px;
+    margin: 0 3px;
+    font-size: 0.9em;
+  }
+  
+  .vikarov-procurement .dialog-buttons button:hover {
+    background: #555;
+  }
+  
+  .vikarov-procurement .dialog-buttons button[data-button="normal"] {
+    background: #333;
+    border: 1px solid #666;
+  }
+  
+  .vikarov-procurement .dialog-buttons button[data-button="normal"]:hover {
+    background: #444;
+  }
